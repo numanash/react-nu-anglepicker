@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 type Props = {
   styles?: React.CSSProperties
@@ -18,13 +18,14 @@ export default function NuAnglePicker({
   shiftSnap = 15,
   snap = 1,
   min = 0,
-  value = 90,
+  value = 0,
   onChange,
   handleValueChange,
   label = true,
 }: Props) {
   const [simpleVal, setSimpleVal] = useState(value)
   const nuRef = useRef<HTMLDivElement | null>(null)
+  const labelRef = useRef<HTMLLabelElement | null>(null)
   const refProp = useRef<any>({
     value,
     startOffset: {
@@ -36,6 +37,11 @@ export default function NuAnglePicker({
   const mouseDown = useRef<boolean>(false)
 
   const pointerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    setDegrees(value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nuRef.current])
 
   const styles: React.CSSProperties = {
     width: '50px',
@@ -126,6 +132,7 @@ export default function NuAnglePicker({
     const tempValue = clockwise ? props.value : -props.value
     const rotation = 'rotate(' + -tempValue + 'deg)'
     refProp.current.value = tempValue
+    labelRef.current && (labelRef.current.innerText = tempValue)
     handleValueChange && handleValueChange(tempValue)
     if (pointerRef.current)
       pointerRef.current.style.cssText = `
@@ -140,7 +147,7 @@ export default function NuAnglePicker({
   return (
     <>
       {/* styles */}
-      {`<style>
+      <style>{`
 .nu-anglepicker {
   background: #dbdbdb;
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RiZGJkYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjIwJSIgc3RvcC1jb2xvcj0iI2UxZTFkZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmOGY4ZjMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -201,7 +208,16 @@ export default function NuAnglePicker({
 .nu-anglepicker:hover, .nu-anglepicker.nu-anglepicker-dragging {
   border-color: #494949;
 }
-    </style>`}
+.nu-anglepicker-val-label{
+  font-size: 10px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    margin-left: 2px;
+    pointer-events: none;
+}
+`}</style>
       <div
         style={styles}
         ref={nuRef}
@@ -226,7 +242,11 @@ export default function NuAnglePicker({
           <div>
             <div className='nu-anglepicker-center-circle'></div>
             <div className='nu-anglepicker-line'></div>
-            {label && <div className='nu-anglepicker-val-label'>{refProp.current.value} &#8451;</div>}
+            {label && (
+              <div className='nu-anglepicker-val-label'>
+                <label ref={labelRef}>{refProp.current.value}</label>°
+              </div>
+            )}
           </div>
         </div>
       </div>
