@@ -1,1 +1,0 @@
-yarn build && npm pack && npm i react-nu-anglepicker-1.0.0.tgz --prefix example
