@@ -7,7 +7,7 @@
 
 You can clone it and step by step create your own NPM package and publish it.
 
-It is simple React counter.
+It is simple React anglepicker.
 
 [**Live Demo**](https://numanash.github.io/react-nu-anglepicker/)
 
@@ -25,7 +25,7 @@ yarn add -D react-nu-anglepicker
 
 ## Usage :
 
-Add `MyCounter` to your component:
+Add `NuAnglePicker` to your component:
 
 ```js
 import React from 'react'
