@@ -1,6 +1,6 @@
 {
   "name": "react-nu-anglepicker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React Angle picker developed for react developers with love/care.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
